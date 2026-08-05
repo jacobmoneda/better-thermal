@@ -1,21 +1,12 @@
 import 'package:better_thermal/components/alert.dart';
 import 'package:better_thermal/config/devices.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/gestures.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 const _sourceUrl = 'https://github.com/simonwep/better-thermal';
 const _sponsorsUrl = 'https://github.com/sponsors/simonwep';
-
-const _buildVersion = String.fromEnvironment(
-  'FLUTTER_BUILD_NAME',
-  defaultValue: '1.0.0',
-);
-
-const _buildNumber = String.fromEnvironment(
-  'FLUTTER_BUILD_NUMBER',
-  defaultValue: '1',
-);
 
 class SettingsScreen extends StatefulWidget {
   final UNITDevice selectedDevice;
@@ -32,7 +23,15 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
+  late final Future<PackageInfo> _packageInfo;
+
   bool _isSaving = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _packageInfo = PackageInfo.fromPlatform();
+  }
 
   Future<void> _selectDevice(UNITDevice? device) async {
     if (device == null || device == widget.selectedDevice || _isSaving) {
@@ -118,23 +117,31 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                 ),
                 Center(
-                  child: Text.rich(
-                    TextSpan(
-                      style: Theme.of(context).textTheme.bodySmall,
-                      children: [
-                        const TextSpan(
-                          text: 'Build $_buildVersion ($_buildNumber) · ',
-                        ),
+                  child: FutureBuilder<PackageInfo>(
+                    future: _packageInfo,
+                    builder: (context, snapshot) {
+                      final buildLabel = snapshot.hasData
+                          ? 'Build ${snapshot.data!.version} '
+                                '(${snapshot.data!.buildNumber}) · '
+                          : 'Build · ';
+
+                      return Text.rich(
                         TextSpan(
-                          text: 'View on GitHub',
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () => _openUrl(_sourceUrl),
+                          style: Theme.of(context).textTheme.bodySmall,
+                          children: [
+                            TextSpan(text: buildLabel),
+                            TextSpan(
+                              text: 'View on GitHub',
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () => _openUrl(_sourceUrl),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      );
+                    },
                   ),
                 ),
               ],

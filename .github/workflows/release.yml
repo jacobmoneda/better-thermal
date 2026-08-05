@@ -88,7 +88,6 @@ jobs:
 
       - name: Determine version
         id: version
-        shell: pwsh
         run: |
           $version = $env:GITHUB_REF_NAME -replace '^v', ''
           $buildNumber = @(git tag --list | Where-Object { $_.Trim() -ne '' }).Count
