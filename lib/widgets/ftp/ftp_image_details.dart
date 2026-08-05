@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
-import 'renderer/ftp_custom_image.dart';
+import 'renderer/custom/ftp_custom_image.dart';
 import 'renderer/ftp_image_renderer.dart';
 import 'renderer/ftp_thermal_image.dart';
 import 'renderer/ftp_visual_image.dart';
@@ -37,23 +37,11 @@ class _FtpImageDetailsState extends ConsumerState<FtpImageDetails> {
     });
   }
 
-  FtpImageRenderer _buildRepresentation(DirectoryEntryFile imageFile) {
+  FtpImageRenderer _buildRepresentation(DirectoryEntryFile image) {
     return switch (_mode) {
-      _ImageMode.thermal => FtpThermalImage(
-        image: imageFile.thermalImage,
-        width: imageFile.width,
-        height: imageFile.height,
-      ),
-      _ImageMode.visual => FtpVisualImage(
-        image: imageFile.visualImage,
-        width: imageFile.width,
-        height: imageFile.height,
-      ),
-      _ImageMode.custom => FtpCustomImage(
-        samples: imageFile.samples,
-        width: imageFile.width,
-        height: imageFile.height,
-      ),
+      _ImageMode.thermal => FtpThermalImage(image: image),
+      _ImageMode.visual => FtpVisualImage(image: image),
+      _ImageMode.custom => FtpCustomImage(image: image),
     };
   }
 

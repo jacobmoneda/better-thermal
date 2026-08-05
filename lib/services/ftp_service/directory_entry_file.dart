@@ -8,6 +8,14 @@ class ThermalSample {
   final int raw;
 }
 
+/// Temperature range of a thermal image, in degrees Celsius.
+class TemperatureRange {
+  const TemperatureRange(this.minimum, this.maximum);
+
+  final double minimum;
+  final double maximum;
+}
+
 /// Reverse-engineered, cleaned up Dart port of the Thermal-Link DataParser_ImgFile class.
 class DirectoryEntryFile {
   static const int requestIdSize = 4;
@@ -25,6 +33,7 @@ class DirectoryEntryFile {
   late final int height;
 
   late final List<ThermalSample> samples;
+  late final TemperatureRange temperatureRange;
 
   late final Uint8List visualImage; // Bitmap-encoded visual image
   late final Uint8List thermalImage; // Bitmap-encoded thermal image
@@ -211,6 +220,18 @@ class DirectoryEntryFile {
           ).getUint16(0, Endian.big),
         ),
     ];
+
+    // Calculate the temperature range from the samples
+    var minimum = samples.first.celsius;
+    var maximum = minimum;
+
+    for (var index = 1; index < samples.length; index++) {
+      final value = samples[index].celsius;
+      if (value < minimum) minimum = value;
+      if (value > maximum) maximum = value;
+    }
+
+    temperatureRange = TemperatureRange(minimum, maximum);
 
     return end;
   }

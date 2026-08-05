@@ -3,8 +3,8 @@ import 'package:better_thermal/config/temperature_unit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class FtpThermalGradient extends ConsumerWidget {
-  const FtpThermalGradient({
+class ThermalGradient extends ConsumerWidget {
+  const ThermalGradient({
     super.key,
     required this.minimum,
     required this.maximum,
