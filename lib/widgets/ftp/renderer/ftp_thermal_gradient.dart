@@ -1,6 +1,9 @@
+import 'package:better_thermal/providers/app_providers.dart';
+import 'package:better_thermal/config/temperature_unit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class FtpThermalGradient extends StatelessWidget {
+class FtpThermalGradient extends ConsumerWidget {
   const FtpThermalGradient({
     super.key,
     required this.minimum,
@@ -11,7 +14,8 @@ class FtpThermalGradient extends StatelessWidget {
   final double? maximum;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final temperatureUnit = ref.watch(temperatureUnitProvider);
     final textStyle = Theme.of(context).textTheme.bodySmall;
 
     return Column(
@@ -28,16 +32,22 @@ class FtpThermalGradient extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(_formatTemperature(minimum), style: textStyle),
-            Text(_formatTemperature(maximum), style: textStyle),
+            Text(
+              _formatTemperature(minimum, temperatureUnit),
+              style: textStyle,
+            ),
+            Text(
+              _formatTemperature(maximum, temperatureUnit),
+              style: textStyle,
+            ),
           ],
         ),
       ],
     );
   }
 
-  String _formatTemperature(double? value) {
-    return value == null ? '--' : '${value.toStringAsFixed(1)} °C';
+  String _formatTemperature(double? value, TemperatureUnit unit) {
+    return value == null ? '--' : unit.formatCelsius(value);
   }
 }
 

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:better_thermal/providers/app_providers.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:better_thermal/services/live_stream_service/live_stream_service.dart';
 
 class _ButtonConfig {
@@ -15,10 +17,8 @@ class _ButtonConfig {
   });
 }
 
-class ConnectButton extends StatelessWidget {
-  final LiveStreamService deviceService;
-
-  const ConnectButton({super.key, required this.deviceService});
+class ConnectButton extends ConsumerWidget {
+  const ConnectButton({super.key});
 
   Map<LiveStreamStatus, _ButtonConfig> _getConfigMap(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
@@ -47,7 +47,7 @@ class ConnectButton extends StatelessWidget {
     };
   }
 
-  void _toggleConnection() {
+  void _toggleConnection(LiveStreamService deviceService) {
     if (deviceService.status == LiveStreamStatus.connecting) {
       return;
     }
@@ -61,7 +61,8 @@ class ConnectButton extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final deviceService = ref.watch(liveStreamServiceProvider);
     return StreamBuilder<LiveStreamStatus>(
       stream: deviceService.statusStream,
       initialData: deviceService.status,
@@ -74,7 +75,7 @@ class ConnectButton extends StatelessWidget {
             backgroundColor: config.backgroundColor,
             foregroundColor: config.foregroundColor,
           ),
-          onPressed: _toggleConnection,
+          onPressed: () => _toggleConnection(deviceService),
           label: Text(config.text),
           icon: Icon(config.icon),
         );

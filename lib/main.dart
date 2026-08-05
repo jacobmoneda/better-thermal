@@ -1,5 +1,6 @@
 import 'package:better_thermal/widgets/app.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nativeapi/nativeapi.dart';
 
 void main() {
@@ -11,7 +12,7 @@ void main() {
     window.isResizable = false;
   }
 
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {

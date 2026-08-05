@@ -1,28 +1,24 @@
 import 'package:better_thermal/components/alert.dart';
 import 'package:better_thermal/config/devices.dart';
+import 'package:better_thermal/config/temperature_unit.dart';
+import 'package:better_thermal/providers/app_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 const _sourceUrl = 'https://github.com/simonwep/better-thermal';
 const _sponsorsUrl = 'https://github.com/sponsors/simonwep';
 
-class SettingsScreen extends StatefulWidget {
-  final UNITDevice selectedDevice;
-  final Future<void> Function(UNITDevice device) onDeviceSelected;
-
-  const SettingsScreen({
-    super.key,
-    required this.selectedDevice,
-    required this.onDeviceSelected,
-  });
+class SettingsScreen extends ConsumerStatefulWidget {
+  const SettingsScreen({super.key});
 
   @override
-  State<SettingsScreen> createState() => _SettingsScreenState();
+  ConsumerState<SettingsScreen> createState() => _SettingsScreenState();
 }
 
-class _SettingsScreenState extends State<SettingsScreen> {
+class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   late final Future<PackageInfo> _packageInfo;
 
   bool _isSaving = false;
@@ -33,8 +29,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
     _packageInfo = PackageInfo.fromPlatform();
   }
 
+  Future<void> _openUrl(String url) async {
+    await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+  }
+
   Future<void> _selectDevice(UNITDevice? device) async {
-    if (device == null || device == widget.selectedDevice || _isSaving) {
+    final selectedDevice = ref.read(selectedDeviceProvider);
+    if (device == null || device == selectedDevice || _isSaving) {
       return;
     }
 
@@ -43,7 +44,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     });
 
     try {
-      await widget.onDeviceSelected(device);
+      await ref.read(appSettingsProvider.notifier).setSelectedDevice(device);
     } finally {
       if (mounted) {
         setState(() {
@@ -53,21 +54,38 @@ class _SettingsScreenState extends State<SettingsScreen> {
     }
   }
 
-  Future<void> _openUrl(String url) async {
-    await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+  Future<void> _selectTemperatureUnit(TemperatureUnit? unit) async {
+    final temperatureUnit = ref.read(temperatureUnitProvider);
+    if (unit == null || unit == temperatureUnit || _isSaving) {
+      return;
+    }
+
+    setState(() {
+      _isSaving = true;
+    });
+
+    try {
+      await ref.read(appSettingsProvider.notifier).setTemperatureUnit(unit);
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isSaving = false;
+        });
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final settings = ref.watch(appSettingsProvider);
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Column(
         spacing: 8,
         children: [
-          Text('Device', style: Theme.of(context).textTheme.titleLarge),
           Card(
             child: DropdownButtonFormField<UNITDevice>(
-              initialValue: widget.selectedDevice,
+              initialValue: settings.selectedDevice,
               decoration: const InputDecoration(
                 labelText: 'Device model',
                 border: OutlineInputBorder(),
@@ -87,6 +105,29 @@ class _SettingsScreenState extends State<SettingsScreen> {
             type: .warning,
             message:
                 'Make sure to turn on Wi-Fi on your device and connect to it from your phone. You may also need to disable mobile data on your phone to connect to the device.',
+          ),
+          Card(
+            child: DropdownButtonFormField<TemperatureUnit>(
+              initialValue: settings.temperatureUnit,
+              decoration: const InputDecoration(
+                labelText: 'Temperature unit',
+                border: OutlineInputBorder(),
+              ),
+              items: TemperatureUnit.values
+                  .map(
+                    (unit) => DropdownMenuItem<TemperatureUnit>(
+                      value: unit,
+                      child: Text('${unit.label} (${unit.symbol})'),
+                    ),
+                  )
+                  .toList(),
+              onChanged: _isSaving ? null : _selectTemperatureUnit,
+            ),
+          ),
+          const Alert(
+            type: .warning,
+            message:
+                'This only affects the representation of the temperature in the app. The device will still measure in what has been configured on the device itself.',
           ),
           Expanded(
             child: Column(

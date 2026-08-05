@@ -4,10 +4,13 @@
   <img src="https://github.com/user-attachments/assets/e459b32a-4d75-4a40-907e-05f5532b6062" alt="Logo" height="150">
 </h3>
 
-
 <h3 align="center">
   🔥 Better Thermal - Unofficial, FOSS App for <a href="https://uni-t-shop.eu/">UNI-T</a> Thermal Cameras 🔥
 </h3>
+
+<h6 align="center">
+  <a href="https://github.com/simonwep/better-thermal/actions/workflows/analyze.yml"><img src="https://github.com/simonwep/better-thermal/actions/workflows/analyze.yml/badge.svg"/></a>
+</h6>
 
 ## Why
 

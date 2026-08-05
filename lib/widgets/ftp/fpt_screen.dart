@@ -1,21 +1,20 @@
 import 'package:better_thermal/components/alert.dart';
+import 'package:better_thermal/providers/app_providers.dart';
 import 'package:better_thermal/services/ftp_service/directory_entry.dart';
-import 'package:better_thermal/services/ftp_service/ftp_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'ftp_image_details.dart';
 import 'ftp_image_preview.dart';
 
-class FtpScreen extends StatefulWidget {
-  final FtpService ftpService;
-
-  const FtpScreen({super.key, required this.ftpService});
+class FtpScreen extends ConsumerStatefulWidget {
+  const FtpScreen({super.key});
 
   @override
-  State<FtpScreen> createState() => _FtpScreenState();
+  ConsumerState<FtpScreen> createState() => _FtpScreenState();
 }
 
-class _FtpScreenState extends State<FtpScreen> {
+class _FtpScreenState extends ConsumerState<FtpScreen> {
   static const int _pageSize = 8;
 
   late final Map<int, List<DirectoryEntryThumbnail>> _cachedPages = {};
@@ -37,7 +36,8 @@ class _FtpScreenState extends State<FtpScreen> {
       _isLoading = true;
     });
 
-    widget.ftpService
+    ref
+        .read(ftpServiceProvider)
         .listImages(page, _pageSize)
         .then((entries) {
           setState(() {
@@ -161,7 +161,6 @@ class _FtpScreenState extends State<FtpScreen> {
                           Navigator.of(context).push(
                             MaterialPageRoute<void>(
                               builder: (_) => FtpImageDetails(
-                                ftpService: widget.ftpService,
                                 fileName: currentPageEntries[index].name,
                               ),
                             ),

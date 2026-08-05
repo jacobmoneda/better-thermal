@@ -1,6 +1,7 @@
 import 'package:better_thermal/services/ftp_service/directory_entry_file.dart';
-import 'package:better_thermal/services/ftp_service/ftp_service.dart';
+import 'package:better_thermal/providers/app_providers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
 import 'renderer/ftp_custom_image.dart';
@@ -10,21 +11,16 @@ import 'renderer/ftp_visual_image.dart';
 
 enum _ImageMode { thermal, visual, custom }
 
-class FtpImageDetails extends StatefulWidget {
-  const FtpImageDetails({
-    super.key,
-    required this.ftpService,
-    required this.fileName,
-  });
+class FtpImageDetails extends ConsumerStatefulWidget {
+  const FtpImageDetails({super.key, required this.fileName});
 
-  final FtpService ftpService;
   final String fileName;
 
   @override
-  State<FtpImageDetails> createState() => _FtpImageDetailsState();
+  ConsumerState<FtpImageDetails> createState() => _FtpImageDetailsState();
 }
 
-class _FtpImageDetailsState extends State<FtpImageDetails> {
+class _FtpImageDetailsState extends ConsumerState<FtpImageDetails> {
   late Future<DirectoryEntryFile> _imageFuture;
   var _mode = _ImageMode.thermal;
   var _isSharing = false;
@@ -32,12 +28,12 @@ class _FtpImageDetailsState extends State<FtpImageDetails> {
   @override
   void initState() {
     super.initState();
-    _imageFuture = widget.ftpService.getImage(widget.fileName);
+    _imageFuture = ref.read(ftpServiceProvider).getImage(widget.fileName);
   }
 
   void _retry() {
     setState(() {
-      _imageFuture = widget.ftpService.getImage(widget.fileName);
+      _imageFuture = ref.read(ftpServiceProvider).getImage(widget.fileName);
     });
   }
 

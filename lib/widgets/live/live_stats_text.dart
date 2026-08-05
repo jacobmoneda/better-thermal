@@ -1,17 +1,17 @@
 import 'package:better_thermal/extensions/file_size_extension.dart';
+import 'package:better_thermal/providers/app_providers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:better_thermal/services/live_stream_service/live_stream_service.dart';
 
-class LiveStatsText extends StatefulWidget {
-  final LiveStreamService deviceService;
-
-  const LiveStatsText({super.key, required this.deviceService});
+class LiveStatsText extends ConsumerStatefulWidget {
+  const LiveStatsText({super.key});
 
   @override
-  State<LiveStatsText> createState() => _LiveStatsTextState();
+  ConsumerState<LiveStatsText> createState() => _LiveStatsTextState();
 }
 
-class _LiveStatsTextState extends State<LiveStatsText> {
+class _LiveStatsTextState extends ConsumerState<LiveStatsText> {
   late LiveStreamStatus _currentStatus;
   double _currentKbps = 0;
   double _currentFps = 0;
@@ -19,18 +19,19 @@ class _LiveStatsTextState extends State<LiveStatsText> {
   @override
   void initState() {
     super.initState();
-    _currentStatus = widget.deviceService.status;
+    final deviceService = ref.read(liveStreamServiceProvider);
+    _currentStatus = deviceService.status;
 
-    widget.deviceService.statusStream.listen((status) {
+    deviceService.statusStream.listen((status) {
       setState(() {
         _currentStatus = status;
       });
     });
 
-    widget.deviceService.fpsConnector.listen((fps) {
+    deviceService.fpsConnector.listen((fps) {
       setState(() {
         _currentFps = fps;
-        _currentKbps = (fps * widget.deviceService.bytesPerFrame * 8) / 1000;
+        _currentKbps = (fps * deviceService.bytesPerFrame * 8) / 1000;
       });
     });
   }

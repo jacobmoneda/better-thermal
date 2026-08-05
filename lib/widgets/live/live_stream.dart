@@ -1,22 +1,22 @@
 import 'package:better_thermal/components/alert.dart';
+import 'package:better_thermal/providers/app_providers.dart';
+import 'package:better_thermal/services/live_stream_service/live_stream_service.dart';
 import 'package:better_thermal/widgets/live/live_stats_text.dart';
 import 'package:flutter/material.dart';
-import 'package:better_thermal/services/live_stream_service/live_stream_service.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:better_thermal/widgets/live/connect_button.dart';
 import 'package:better_thermal/widgets/live/live_image.dart';
 import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
 
-class LiveStream extends StatefulWidget {
-  final LiveStreamService liveStreamService;
-
-  const LiveStream({super.key, required this.liveStreamService});
+class LiveStream extends ConsumerStatefulWidget {
+  const LiveStream({super.key});
 
   @override
-  State<LiveStream> createState() => _LiveStreamState();
+  ConsumerState<LiveStream> createState() => _LiveStreamState();
 }
 
-class _LiveStreamState extends State<LiveStream> {
+class _LiveStreamState extends ConsumerState<LiveStream> {
   final _liveImageKey = GlobalKey<LiveImageCanvasState>();
 
   Future<void> _shareCurrentFrame() async {
@@ -47,7 +47,7 @@ class _LiveStreamState extends State<LiveStream> {
 
   @override
   Widget build(BuildContext context) {
-    final liveStreamService = super.widget.liveStreamService;
+    final liveStreamService = ref.watch(liveStreamServiceProvider);
 
     return Scaffold(
       appBar: AppBar(),
@@ -77,19 +77,13 @@ class _LiveStreamState extends State<LiveStream> {
               ),
               ClipRRect(
                 borderRadius: BorderRadius.circular(4),
-                child: LiveImageCanvas(
-                  key: _liveImageKey,
-                  liveStreamService: liveStreamService,
-                ),
+                child: LiveImageCanvas(key: _liveImageKey),
               ),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: LiveStatsText(deviceService: liveStreamService),
-              ),
+              Align(alignment: Alignment.centerLeft, child: LiveStatsText()),
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  ConnectButton(deviceService: liveStreamService),
+                  ConnectButton(),
                   const SizedBox(width: 8),
                   ElevatedButton.icon(
                     onPressed: _shareCurrentFrame,

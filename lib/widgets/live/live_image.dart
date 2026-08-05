@@ -1,20 +1,20 @@
 import 'dart:async';
-import 'package:flutter/material.dart';
+import 'package:better_thermal/providers/app_providers.dart';
 import 'package:better_thermal/services/live_stream_service/live_stream_service.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:image/image.dart' as img;
 
-class LiveImageCanvas extends StatefulWidget {
-  final LiveStreamService liveStreamService;
-
-  const LiveImageCanvas({super.key, required this.liveStreamService});
+class LiveImageCanvas extends ConsumerStatefulWidget {
+  const LiveImageCanvas({super.key});
 
   @override
   LiveImageCanvasState createState() => LiveImageCanvasState();
 }
 
-class LiveImageCanvasState extends State<LiveImageCanvas> {
+class LiveImageCanvasState extends ConsumerState<LiveImageCanvas> {
   ui.Image? _latestFrame;
   Uint8List? _latestFrameBytes;
   StreamSubscription<Uint8List>? _frameSubscription;
@@ -22,10 +22,18 @@ class LiveImageCanvasState extends State<LiveImageCanvas> {
   @override
   void initState() {
     super.initState();
+    _subscribe(ref.read(liveStreamServiceProvider));
+    ref.listenManual(liveStreamServiceProvider, (_, service) {
+      _frameSubscription?.cancel();
+      _latestFrame?.dispose();
+      _latestFrame = null;
+      _latestFrameBytes = null;
+      _subscribe(service);
+    });
+  }
 
-    _frameSubscription = widget.liveStreamService.frameStream.listen((
-      Uint8List rgbaFrame,
-    ) {
+  void _subscribe(LiveStreamService service) {
+    _frameSubscription = service.frameStream.listen((Uint8List rgbaFrame) {
       _decodeAndPublishFrame(rgbaFrame);
     });
   }
@@ -44,8 +52,8 @@ class LiveImageCanvasState extends State<LiveImageCanvas> {
     }
 
     final image = img.Image.fromBytes(
-      width: widget.liveStreamService.width,
-      height: widget.liveStreamService.height,
+      width: ref.read(liveStreamServiceProvider).width,
+      height: ref.read(liveStreamServiceProvider).height,
       bytes: rgbaFrame.buffer,
       numChannels: 4,
     );
@@ -58,8 +66,8 @@ class LiveImageCanvasState extends State<LiveImageCanvas> {
 
     ui.decodeImageFromPixels(
       rgbaFrame,
-      widget.liveStreamService.width,
-      widget.liveStreamService.height,
+      ref.read(liveStreamServiceProvider).width,
+      ref.read(liveStreamServiceProvider).height,
       ui.PixelFormat.rgba8888,
       (ui.Image image) {
         if (!mounted) {
@@ -77,12 +85,12 @@ class LiveImageCanvasState extends State<LiveImageCanvas> {
 
   @override
   Widget build(BuildContext context) {
+    final liveStreamService = ref.watch(liveStreamServiceProvider);
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         AspectRatio(
-          aspectRatio: widget.liveStreamService.width /
-              widget.liveStreamService.height,
+          aspectRatio: liveStreamService.width / liveStreamService.height,
           child: CustomPaint(
             painter: _LiveImagePainter(image: _latestFrame),
             child: const SizedBox.expand(),
