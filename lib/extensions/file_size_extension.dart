@@ -28,8 +28,9 @@ extension FileSizeExtensions on num {
             .toStringAsFixed(round);
 
     //Check if the result ends with .00000 (depending on how many decimals) and remove it if found.
-    if (result.endsWith("0" * round))
+    if (result.endsWith("0" * round)) {
       result = result.substring(0, result.length - round - 1);
+    }
 
     return "$result ${affixes[affix]}";
   }

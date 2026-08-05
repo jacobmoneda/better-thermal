@@ -11,24 +11,19 @@ class LiveImageCanvas extends StatefulWidget {
   const LiveImageCanvas({super.key, required this.liveStreamService});
 
   @override
-  LiveImageCanvasState createState() =>
-      LiveImageCanvasState(liveStreamService: liveStreamService);
+  LiveImageCanvasState createState() => LiveImageCanvasState();
 }
 
 class LiveImageCanvasState extends State<LiveImageCanvas> {
-  final LiveStreamService _liveStreamService;
-
   ui.Image? _latestFrame;
   Uint8List? _latestFrameBytes;
   StreamSubscription<Uint8List>? _frameSubscription;
-
-  LiveImageCanvasState({required this._liveStreamService});
 
   @override
   void initState() {
     super.initState();
 
-    _frameSubscription = _liveStreamService.frameStream.listen((
+    _frameSubscription = widget.liveStreamService.frameStream.listen((
       Uint8List rgbaFrame,
     ) {
       _decodeAndPublishFrame(rgbaFrame);
@@ -49,8 +44,8 @@ class LiveImageCanvasState extends State<LiveImageCanvas> {
     }
 
     final image = img.Image.fromBytes(
-      width: _liveStreamService.width,
-      height: _liveStreamService.height,
+      width: widget.liveStreamService.width,
+      height: widget.liveStreamService.height,
       bytes: rgbaFrame.buffer,
       numChannels: 4,
     );
@@ -63,8 +58,8 @@ class LiveImageCanvasState extends State<LiveImageCanvas> {
 
     ui.decodeImageFromPixels(
       rgbaFrame,
-      _liveStreamService.width,
-      _liveStreamService.height,
+      widget.liveStreamService.width,
+      widget.liveStreamService.height,
       ui.PixelFormat.rgba8888,
       (ui.Image image) {
         if (!mounted) {
@@ -86,7 +81,8 @@ class LiveImageCanvasState extends State<LiveImageCanvas> {
       mainAxisSize: MainAxisSize.min,
       children: [
         AspectRatio(
-          aspectRatio: _liveStreamService.width / _liveStreamService.height,
+          aspectRatio: widget.liveStreamService.width /
+              widget.liveStreamService.height,
           child: CustomPaint(
             painter: _LiveImagePainter(image: _latestFrame),
             child: const SizedBox.expand(),

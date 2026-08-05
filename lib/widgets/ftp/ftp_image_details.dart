@@ -1,4 +1,3 @@
-import 'package:cross_file/cross_file.dart';
 import 'package:better_thermal/services/ftp_service/directory_entry_file.dart';
 import 'package:better_thermal/services/ftp_service/ftp_service.dart';
 import 'package:flutter/material.dart';
