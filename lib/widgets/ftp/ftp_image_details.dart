@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
-import 'renderer/custom/ftp_custom_image.dart';
+import 'renderer/ftp_custom_image/ftp_custom_image.dart';
 import 'renderer/ftp_image_renderer.dart';
 import 'renderer/ftp_thermal_image.dart';
 import 'renderer/ftp_visual_image.dart';
@@ -120,7 +120,6 @@ class _FtpImageDetailsState extends ConsumerState<FtpImageDetails> {
                 Column(
                   spacing: 1,
                   children: [
-                    _MetadataRow(label: 'File name', value: imageFile.fileName),
                     _MetadataRow(
                       label: 'Dimensions',
                       value: '${imageFile.width} × ${imageFile.height}',
@@ -130,14 +129,6 @@ class _FtpImageDetailsState extends ConsumerState<FtpImageDetails> {
                       value: imageFile.createdTime.toLocal().toString(),
                     ),
                     _MetadataRow(label: 'Model', value: imageFile.modelText),
-                    _MetadataRow(
-                      label: 'Humidity',
-                      value: imageFile.humidityText,
-                    ),
-                    _MetadataRow(
-                      label: 'Temperature',
-                      value: imageFile.temperatureText,
-                    ),
                     _MetadataRow(
                       label: 'Emissivity',
                       value: imageFile.emissivityText,

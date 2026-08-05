@@ -1,5 +1,5 @@
 import 'package:better_thermal/services/ftp_service/directory_entry_file.dart';
-import 'package:better_thermal/widgets/ftp/renderer/custom/thermal_gradient.dart';
+import 'package:better_thermal/widgets/ftp/renderer/ftp_custom_image/thermal_gradient.dart';
 import 'package:flutter/material.dart';
 
 List<Color> renderThermalSamples(
