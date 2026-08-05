@@ -17,6 +17,13 @@
   <defs
      id="defs1">
     <linearGradient
+       id="swatch18">
+      <stop
+         style="stop-color:#e6a6a6;stop-opacity:1;"
+         offset="0"
+         id="stop18" />
+    </linearGradient>
+    <linearGradient
        id="linearGradient1"
        inkscape:collect="always"
        inkscape:label="Temperature">
@@ -54,7 +61,7 @@
        x2="19.810846"
        y2="19.788046"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1.1162791,0,0,1.1162791,-1.3953488,-1.6744186)" />
+       gradientTransform="matrix(1.1162769,0,0,1.1162769,-1.3953209,-1.6744152)" />
   </defs>
   <sodipodi:namedview
      id="namedview1"
@@ -65,9 +72,9 @@
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="27.297268"
-     inkscape:cx="15.257937"
-     inkscape:cy="12.840113"
+     inkscape:zoom="19.302083"
+     inkscape:cx="13.185105"
+     inkscape:cy="15.620076"
      inkscape:window-width="3840"
      inkscape:window-height="2071"
      inkscape:window-x="-9"
@@ -75,7 +82,8 @@
      inkscape:window-maximized="1"
      inkscape:current-layer="svg1" />
   <path
-     d="m 12,24 c -4.6237841,0 -8.372093,-3.748355 -8.372093,-8.372093 0,-2.404241 1.0134251,-4.571721 2.6364168,-6.0986794 C 7.7626382,8.1195348 11.44186,5.5808482 10.88372,0 c 6.697675,4.4651162 10.046511,8.9302318 3.348837,15.627907 1.11628,0 2.7907,0 5.581397,-2.757655 0.301061,0.863553 0.558139,1.791516 0.558139,2.757655 C 20.372093,20.251645 16.62374,24 12,24 Z"
+     d="m 11.999999,23.999951 c -4.6237741,0 -8.3720741,-3.748347 -8.3720741,-8.372075 0,-2.404235 1.0134232,-4.571712 2.6364117,-6.0986677 C 7.7626475,8.1195187 11.44186,5.5808371 10.883719,0 c 6.697663,4.4651073 10.046493,8.9302139 3.348833,15.627876 1.116277,0 2.790695,0 5.581386,-2.757651 0.301058,0.863553 0.558136,1.791513 0.558136,2.757651 0,4.623728 -3.748344,8.372075 -8.372075,8.372075 z"
      id="path1"
-     style="fill:url(#linearGradient12);stroke-width:1.11627" />
+     style="fill:url(#linearGradient12);stroke:none;stroke-width:0.999996;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
+     inkscape:label="flame" />
 </svg>

@@ -7,7 +7,7 @@ void main() {
 
   if (window != null) {
     window.setSize(450, 800);
-    window.title = 'UNI-T Better Thermal';
+    window.title = 'Better Thermal';
     window.isResizable = false;
   }
 
@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'UNI-T Thermal Viewer',
+      title: 'Thermal Viewer',
       theme: ThemeData.dark(useMaterial3: true),
       home: const AppScreen(),
     );
