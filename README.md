@@ -16,10 +16,11 @@
 
 The [official app](https://play.google.com/store/apps/details?id=com.unitrend.thermal_link&hl=en) is -
 
-- Not fully translated (partly in Chinese which looks sketchy)
+- Closed-source
+- Partly in Chinese (not translated)
 - Slow as heck when browsing photos (on my Pixel 10)
 - Asks for too many permissions before it can be used
-- Doesn't use all the features the thermal camera actually provides (lol?)
+- Doesn't use all the features the thermal camera actually provides
 
 ## Supported devices
 
@@ -40,7 +41,36 @@ Supported thermal cameras are [UTi730E](https://uni-trendus.com/products/uti730e
 
 ## Screenshots
 
-> [!NOTE]
-> Screenshots are from a Pixel 10 using the [UTi720E](https://uni-t-shop.eu/products/uti720e-enhanced-thermal-camera).
+### Live preview and settings
 
-WIP.
+> [!NOTE]
+> The recording comes from an emulator, with a physical device I get around 8-15FPS depending on the WI-FI connection.
+> All the following images/vides are taken with a [UTi720E](https://uni-t-shop.eu/products/uti720e-enhanced-thermal-camera).
+
+<p float="left">
+  <img width="330" alt="Screenshot_20260809_144752" src="https://github.com/user-attachments/assets/ea9a7a24-3f8d-44ee-9e73-46c9c19cfb0d" />
+  <img width="330" alt="Screenshot_20260809_144752" src="https://github.com/user-attachments/assets/50d951a4-2fc9-4fc9-8526-580bff82e895" />
+  <img width="330" alt="Screenshot_20260809_144645" src="https://github.com/user-attachments/assets/8f2390fd-498b-4aae-9c64-c41fd69a610c" />
+</p>
+
+### Inspecting taken images
+
+> [!NOTE]
+> Thermal and visual images are both provided by the thermal camera itself.
+
+<p float="left">
+  <img width="330" alt="Screenshot_20260809_144621" src="https://github.com/user-attachments/assets/84042e9d-facc-4a32-a18d-9aef7fd6df31" />
+  <img width="330" alt="Screenshot_20260810_165605" src="https://github.com/user-attachments/assets/cfdb3e15-9133-45f1-bbb8-945b7e099ff9" />
+  <img width="330" alt="Screenshot_20260810_165601" src="https://github.com/user-attachments/assets/ff5adfac-3191-4c8a-a421-9efed602a67b" />
+</p>
+
+> [!NOTE]
+> Images can be opened to inspect / visualize the raw thermal data (that is also embedded in each image).
+
+<p float="left">
+  <img width="330" alt="Screenshot_20260810_165632" src="https://github.com/user-attachments/assets/a8e87abb-9bbe-49f3-9287-75d2e293e639" />
+  <img width="330" alt="Screenshot_20260810_165620" src="https://github.com/user-attachments/assets/8536432d-55e5-4e24-9c4e-c8294e25e47b" />
+  <img width="330" alt="Screenshot_20260810_165609" src="https://github.com/user-attachments/assets/d45627b2-6d14-4af1-9502-2bb37e2ed6ec" />
+</p>
+
+
